@@ -609,7 +609,7 @@ int main(
       conduit::Node poly;
 
       if (dim.getValue() == 2) {
-         conduit::blueprint::mpi::mesh::to_poly(flatn, poly, "mesh");
+         conduit::blueprint::mpi::mesh::to_polygonal(flatn, poly, "mesh");
       } else {
          conduit::blueprint::mpi::mesh::to_polyhedral(flatn, poly, "mesh");
       }
