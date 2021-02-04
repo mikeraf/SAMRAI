@@ -583,7 +583,7 @@ int main(
       if (test_to_run == "CellDataTest") {
          bp_utils.flattenFields(flatn, bp_node);
       }
-
+/*
       bp_utils.writeBlueprintMesh(
          bp_node,
          tbox::SAMRAI_MPI::getSAMRAIWorld(),
@@ -592,16 +592,16 @@ int main(
          "celldata",
          "bpindex.root",
          "json");
-/*
+*/
       bp_utils.writeBlueprintMesh(
          flatn,
          tbox::SAMRAI_MPI::getSAMRAIWorld(),
          num_hier_patches,
-         "flat_mesh",
+         "mesh",
          "flat",
          "flat.root",
          "json");
-*/
+
       conduit::Node info;
       TBOX_ASSERT(conduit::blueprint::verify("mesh", bp_node, info));
       TBOX_ASSERT(conduit::blueprint::verify("mesh", flatn, info));

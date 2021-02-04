@@ -182,8 +182,34 @@ void BlueprintUtils::writeBlueprintMesh(
    const std::string& rootfile_name,
    const std::string& io_protocol) const
 {
+   NULL_USE(num_global_domains);
    conduit::Node index;
    int my_rank = samrai_mpi.getRank();
+
+   std::vector<conduit::int64> local_domains;
+
+   conduit::NodeConstIterator itr = blueprint.children();
+   while (itr.has_next()) {
+      const conduit::Node &child = itr.next();
+      if (child.has_child("state")) {
+         const conduit::Node &state = child["state"];
+         if (state.has_child("domain_id")) {
+            conduit::int64 dom_id = state["domain_id"].as_int64();
+            local_domains.push_back(dom_id);
+         }
+      }
+   }
+
+   int global_domain_count = local_domains.size();
+   samrai_mpi.AllReduce(&global_domain_count, 1, MPI_SUM);
+
+   std::vector<int> partition_map(global_domain_count, 0);
+   for (auto m_itr = local_domains.begin(); m_itr != local_domains.end();
+        ++m_itr) {
+       partition_map[*m_itr] = my_rank;
+   }
+
+   samrai_mpi.AllReduce(&partition_map[0], global_domain_count, MPI_MAX);
 
    conduit::Node &bpindex = index["blueprint_index"];
    conduit::blueprint::mpi::mesh::generate_index(
@@ -195,18 +221,34 @@ void BlueprintUtils::writeBlueprintMesh(
       std::string file_pattern = data_name + "%06d." + io_protocol;
       index["protocol/name"].set(io_protocol);
       index["protocol/version"].set(CONDUIT_VERSION);
-
+#if 1
       index["number_of_files"].set(samrai_mpi.getSize());
       index["number_of_trees"].set(num_global_domains);
       index["file_pattern"].set(file_pattern);
       index["tree_pattern"].set("/domain_%06d");
-
-      index.save(rootfile_name, io_protocol);
+#else
+      conduit::Node &mesh = bpindex[mesh_name]; 
+//      mesh["state/partition_size"].set(samrai_mpi.getSize());
+//      mesh["state/number_of_domains"].set(num_global_domains);
+      mesh["state/partition_pattern"].set(file_pattern);
+      mesh["state/domain_pattern"].set("/domain_%06d");
+//      mesh["state/domain_to_partition_map"].set(partition_map);
+#endif
+      if (io_protocol != "hdf5") {
+         index.save(rootfile_name, io_protocol);
+      } else {
+//         conduit::relay::io::hdf5_save(index, rootfile_name);
+      }
    }
 
    std::string file_name = data_name + tbox::Utilities::intToString(my_rank, 6) + "." + io_protocol;
 
-   blueprint.save(file_name, io_protocol);
+   if (io_protocol != "hdf5") {
+      blueprint.save(file_name, io_protocol);
+   } else {
+//      conduit::relay::io::hdf5_save(blueprint, file_name);
+   }
+
 }
 
 void BlueprintUtils::flattenFields(conduit::Node& flat_node,
