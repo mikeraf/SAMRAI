@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   An AMR hierarchy of patch levels
  *
  ************************************************************************/
@@ -1758,16 +1758,16 @@ PatchHierarchy::makeNestingSets(
                      IntVector box_width(overlap.numberCells());
 
                      ratio_db->putInteger("i", ratio[0]);
-                     origin_db->putInteger("i", overlap.lower(0));
+                     origin_db->putInteger("i", overlap.lower(0)-pbox.lower(0));
                      width_db->putInteger("i", box_width[0]);
                      if (d_dim.getValue() > 1) {
                         ratio_db->putInteger("j", ratio[1]);
-                        origin_db->putInteger("j", overlap.lower(1));
+                        origin_db->putInteger("j", overlap.lower(1)-pbox.lower(1));
                         width_db->putInteger("j", box_width[1]);
                      }
                      if (d_dim.getValue() > 2) {
                         ratio_db->putInteger("k", ratio[2]);
-                        origin_db->putInteger("k", overlap.lower(2));
+                        origin_db->putInteger("k", overlap.lower(2)-pbox.lower(2));
                         width_db->putInteger("k", box_width[2]);
                      }
 
@@ -1888,16 +1888,16 @@ PatchHierarchy::makeNestingSets(
                      IntVector box_width(overlap.numberCells());
 
                      ratio_db->putInteger("i", ratio[0]);
-                     origin_db->putInteger("i", overlap.lower(0));
+                     origin_db->putInteger("i", overlap.lower(0)-pbox.lower(0));
                      width_db->putInteger("i", box_width[0]);
                      if (d_dim.getValue() > 1) {
                         ratio_db->putInteger("j", ratio[1]);
-                        origin_db->putInteger("j", overlap.lower(1));
+                        origin_db->putInteger("j", overlap.lower(1)-pbox.lower(1));
                         width_db->putInteger("j", box_width[1]);
                      }
                      if (d_dim.getValue() > 2) {
                         ratio_db->putInteger("k", ratio[2]);
-                        origin_db->putInteger("k", overlap.lower(2));
+                        origin_db->putInteger("k", overlap.lower(2)-pbox.lower(2));
                         width_db->putInteger("k", box_width[2]);
                      }
 

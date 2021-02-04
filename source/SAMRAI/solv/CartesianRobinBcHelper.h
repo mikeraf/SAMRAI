@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Robin boundary condition support on cartesian grids.
  *
  ************************************************************************/
@@ -14,13 +14,10 @@
 
 #include "SAMRAI/solv/RobinBcCoefStrategy.h"
 #include "SAMRAI/xfer/RefinePatchStrategy.h"
-#include "SAMRAI/pdat/ArrayData.h"
-#include "SAMRAI/pdat/CellData.h"
-#include "SAMRAI/pdat/NodeData.h"
 #include "SAMRAI/hier/BoundaryBox.h"
 #include "SAMRAI/hier/PatchLevel.h"
 #include "SAMRAI/hier/Patch.h"
-#include "SAMRAI/tbox/Utilities.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <memory>
 
@@ -459,6 +456,11 @@ private:
     * @brief Whether to assumg g=0 when filling ghosts.
     */
    bool d_homogeneous_bc;
+
+   /*!
+    * Umpire allocator for internal temporary data.
+    */
+   tbox::ResourceAllocator d_allocator;
 
    /*!
     * @brief Timers for performance measurement.

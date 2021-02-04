@@ -3,11 +3,12 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Schedule of communication transactions between processors
  *
  ************************************************************************/
 #include "SAMRAI/tbox/Schedule.h"
+#include "SAMRAI/tbox/AllocatorDatabase.h"
 #include "SAMRAI/tbox/InputManager.h"
 #include "SAMRAI/tbox/PIO.h"
 #include "SAMRAI/tbox/SAMRAIManager.h"
@@ -373,7 +374,16 @@ Schedule::postSends()
       }
 
       // Pack outgoing data into a message.
-      MessageStream outgoing_stream(byte_count, MessageStream::Write);
+      MessageStream outgoing_stream(
+         byte_count,
+         MessageStream::Write,
+         nullptr,
+         true
+#ifdef HAVE_UMPIRE
+         , AllocatorDatabase::getDatabase()->getStreamAllocator()
+#endif
+         );
+
       d_object_timers->t_pack_stream->start();
       for (ConstIterator pack = transactions.begin();
            pack != transactions.end(); ++pack) {
@@ -451,7 +461,11 @@ Schedule::processCompletedCommunications()
             static_cast<size_t>(completed_comm.getRecvSize()) * sizeof(char),
             MessageStream::Read,
             completed_comm.getRecvData(),
-            false /* don't use deep copy */);
+            false /* don't use deep copy */
+#ifdef HAVE_UMPIRE
+            , AllocatorDatabase::getDatabase()->getStreamAllocator()
+#endif
+            );
 
          d_object_timers->t_unpack_stream->start();
          for (Iterator recv = d_recv_sets[sender].begin();
@@ -493,7 +507,11 @@ Schedule::processCompletedCommunications()
                static_cast<size_t>(completed_comm->getRecvSize()) * sizeof(char),
                MessageStream::Read,
                completed_comm->getRecvData(),
-               false /* don't use deep copy */);
+               false /* don't use deep copy */
+#ifdef HAVE_UMPIRE
+               , AllocatorDatabase::getDatabase()->getStreamAllocator()
+#endif
+               );
 
             d_object_timers->t_unpack_stream->start();
             for (Iterator recv = d_recv_sets[sender].begin();
@@ -538,6 +556,9 @@ Schedule::allocateCommunicationObjects()
       d_coms[counter].setMPITag(d_first_tag, d_second_tag);
       d_coms[counter].setMPI(d_mpi);
       d_coms[counter].limitFirstDataLength(d_first_message_length);
+#ifdef HAVE_UMPIRE
+      d_coms[counter].setAllocator(AllocatorDatabase::getDatabase()->getStreamAllocator());
+#endif
       ++counter;
    }
    for (TransactionSets::iterator ti = d_send_sets.begin();
@@ -548,6 +569,9 @@ Schedule::allocateCommunicationObjects()
       d_coms[counter].setMPITag(d_first_tag, d_second_tag);
       d_coms[counter].setMPI(d_mpi);
       d_coms[counter].limitFirstDataLength(d_first_message_length);
+#ifdef HAVE_UMPIRE
+      d_coms[counter].setAllocator(AllocatorDatabase::getDatabase()->getStreamAllocator());
+#endif
       ++counter;
    }
 }

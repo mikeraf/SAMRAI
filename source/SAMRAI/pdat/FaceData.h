@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated face centered patch data type
  *
  ************************************************************************/
@@ -18,8 +18,8 @@
 #include "SAMRAI/pdat/FaceIterator.h"
 #include "SAMRAI/pdat/FaceOverlap.h"
 #include "SAMRAI/hier/PatchData.h"
-#include "SAMRAI/tbox/Complex.h"
 #include "SAMRAI/tbox/PIO.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <iostream>
 #include <memory>
@@ -135,7 +135,6 @@ public:
       int depth,
       const hier::IntVector& ghosts);
 
-#ifdef HAVE_UMPIRE
    /*!
     * @brief The constructor for a face data object.
     *
@@ -158,8 +157,7 @@ public:
       const hier::Box& box,
       int depth,
       const hier::IntVector& ghosts,
-      umpire::Allocator allocator);
-#endif
+      tbox::ResourceAllocator allocator);
 
    /*!
     * @brief The virtual destructor for a face data object.

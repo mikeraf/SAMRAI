@@ -3,14 +3,16 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   High-level solver (wrapper) for scalar poisson equation.
  *
  ************************************************************************/
-#include "SAMRAI/pdat/CellVariable.h"
+
 #include "SAMRAI/solv/CellPoissonFACSolver.h"
+
+#include "SAMRAI/pdat/CellVariable.h"
 #include "SAMRAI/tbox/PIO.h"
-#include "SAMRAI/tbox/StartupShutdownManager.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include IOMANIP_HEADER_FILE
 
@@ -78,6 +80,9 @@ CellPoissonFACSolver::CellPoissonFACSolver(
    // Read user input.
    getFromInput(input_db);
 
+   tbox::ResourceAllocator allocator =
+      tbox::AllocatorDatabase::getDatabase()->getDefaultAllocator();
+
    /*
     * Construct integer tag variables and add to variable database.  Note that
     * variables and patch data indices are shared among all instances.
@@ -95,7 +100,9 @@ CellPoissonFACSolver::CellPoissonFACSolver(
          var_db->getVariable(weight_variable_name)));
    if (!weight) {
       weight.reset(
-         new pdat::CellVariable<double>(d_dim, weight_variable_name, 1));
+         new pdat::CellVariable<double>(d_dim,
+                                        weight_variable_name,
+                                        allocator));
    }
 
    if (s_weight_id[d_dim.getValue() - 1] < 0) {

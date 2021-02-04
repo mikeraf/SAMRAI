@@ -1,5 +1,5 @@
 Stencil {
-  num_variables=50
+  num_variables=20
 }
 
 Main {
@@ -24,6 +24,8 @@ Main {
    // restart dump parameters
    // frequency at which to dump restart output--zero to turn off
    restart_interval     = 0
+
+   norm_baseline = 1.305970149254e-2
 }
 
 // Refer to tbox::TimerManager for input

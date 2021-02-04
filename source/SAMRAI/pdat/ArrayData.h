@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated array data structure supporting patch data types
  *
  ************************************************************************/
@@ -20,11 +20,12 @@
 #include "SAMRAI/hier/BoxContainer.h"
 #include "SAMRAI/hier/Index.h"
 #include "SAMRAI/hier/IntVector.h"
+#include "SAMRAI/tbox/AllocatorDatabase.h"
 #include "SAMRAI/tbox/Complex.h"
 #include "SAMRAI/tbox/Database.h"
 #include "SAMRAI/tbox/MemoryUtilities.h"
 #include "SAMRAI/tbox/MessageStream.h"
-#include "SAMRAI/tbox/AllocatorDatabase.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <typeinfo>
 #include <vector>
@@ -106,7 +107,6 @@ public:
       const hier::Box& box,
       unsigned int depth);
 
-#ifdef HAVE_UMPIRE
    /*!
     * Construct an array data object using an Umpire allocator.
     *
@@ -121,8 +121,7 @@ public:
    ArrayData(
       const hier::Box& box,
       unsigned int depth,
-      umpire::Allocator allocator);
-#endif
+      tbox::ResourceAllocator allocator);
 
    /*!
     * The destructor for an array data object releases all memory allocated

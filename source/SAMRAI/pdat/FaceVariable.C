@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   hier
  *
  ************************************************************************/
@@ -39,6 +39,24 @@ FaceVariable<TYPE>::FaceVariable(
                      // default zero ghost cells
                      hier::IntVector::getZero(dim),
                      fine_boundary_represents_var)),
+   d_fine_boundary_represents_var(fine_boundary_represents_var)
+{
+}
+
+template<class TYPE>
+FaceVariable<TYPE>::FaceVariable(
+   const tbox::Dimension& dim,
+   const std::string& name,
+   tbox::ResourceAllocator allocator,
+   int depth,
+   const bool fine_boundary_represents_var):
+   hier::Variable(name,
+                  std::make_shared<FaceDataFactory<TYPE> >(
+                     depth,
+                     // default zero ghost cells
+                     hier::IntVector::getZero(dim),
+                     fine_boundary_represents_var,
+                     allocator)),
    d_fine_boundary_represents_var(fine_boundary_represents_var)
 {
 }

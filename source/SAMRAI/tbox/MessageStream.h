@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Fixed-size message buffer used in interprocessor communication
  *
  ************************************************************************/
@@ -13,10 +13,11 @@
 
 #include "SAMRAI/SAMRAI_config.h"
 
-#include "SAMRAI/tbox/Complex.h"
+#include "SAMRAI/tbox/AllocatorDatabase.h"
 #include "SAMRAI/tbox/Utilities.h"
 
 #ifdef HAVE_UMPIRE
+#include "umpire/ResourceManager.hpp"
 #include "umpire/TypedAllocator.hpp"
 #endif
 
@@ -67,6 +68,10 @@ public:
     * MessageStream::Read, ignored in write mode.  In shallow copy mode,
     * you cannot call growBufferAsNeeded().
     *
+    * @param[in] allocator  Optional argument only available when
+    * configured with Umpire library.  This allocator will be used for
+    * allocations of internal buffers inside this object.
+    *
     * @pre num_bytes >= 0
     * @pre mode != Read || data_to_read != 0
     */
@@ -74,7 +79,23 @@ public:
       const size_t num_bytes,
       const StreamMode mode,
       const void* data_to_read = 0,
-      bool deep_copy = true);
+      bool deep_copy = true
+#ifdef HAVE_UMPIRE
+      , umpire::TypedAllocator<char> allocator = 
+           AllocatorDatabase::getDatabase()->getInternalHostAllocator()
+#endif
+   );
+
+#ifdef HAVE_UMPIRE
+   /*!
+    * @brief Creates a message stream that grows as needed for writing
+    * which useds a specified Umpire allocator
+    *
+    * @param[in] allocator  This allocator will be used for allocations
+    * of internal buffers inside this object.
+    */
+   MessageStream(umpire::TypedAllocator<char> allocator);
+#endif
 
    /*!
     * @brief Default constructor creates a message stream with a
@@ -430,6 +451,13 @@ private:
     * memory to read from in deep-copy Read mode.
     */
    const char* d_read_buffer;
+
+   /*!
+    * The allocator used for internal buffers
+    */
+#ifdef HAVE_UMPIRE
+   umpire::TypedAllocator<char> d_allocator;
+#endif 
 
    /*!
     * @brief Number of bytes in the buffer.

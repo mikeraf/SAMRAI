@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   High-level solver (wrapper) for scalar poisson equation.
  *
  ************************************************************************/
@@ -17,7 +17,6 @@
 #include "SAMRAI/solv/PoissonSpecifications.h"
 #include "SAMRAI/solv/SimpleCellRobinBcCoefs.h"
 #include "SAMRAI/tbox/Database.h"
-#include "SAMRAI/tbox/Utilities.h"
 
 #include <memory>
 

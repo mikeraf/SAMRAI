@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Main program to test SAMRAI-KINSOL vector interface.
  *
  ************************************************************************/
@@ -194,6 +194,9 @@ int main(
       hierarchy->makeNewPatchLevel(0, layer0);
       hierarchy->makeNewPatchLevel(1, layer1);
 
+      tbox::ResourceAllocator allocator =
+         tbox::AllocatorDatabase::getDatabase()->getDefaultAllocator();
+
       // Create instance of hier::Variable database
       hier::VariableDatabase* variable_db = hier::VariableDatabase::getDatabase();
       std::shared_ptr<hier::VariableContext> dummy(
@@ -203,49 +206,71 @@ int main(
       // Make some dummy variables and data on the hierarchy
       std::shared_ptr<pdat::CellVariable<double> > cvar[NCELL_VARS];
       int cvindx[NCELL_VARS];
-      cvar[0].reset(new pdat::CellVariable<double>(dim3d, "cvar0", 2));
+      cvar[0].reset(new pdat::CellVariable<double>(dim3d, "cvar0",
+                                                   allocator,
+                                                   2));
       cvindx[0] = variable_db->registerVariableAndContext(
             cvar[0], dummy, no_ghosts);
-      cvar[1].reset(new pdat::CellVariable<double>(dim3d, "cvar1", 2));
+      cvar[1].reset(new pdat::CellVariable<double>(dim3d, "cvar1",
+                                                   allocator,
+                                                   2));
       cvindx[1] = variable_db->registerVariableAndContext(
             cvar[1], dummy, no_ghosts);
 
       std::shared_ptr<pdat::CellVariable<double> > cwgt(
-         new pdat::CellVariable<double>(dim3d, "cwgt", 1));
+         new pdat::CellVariable<double>(dim3d, "cwgt",
+                                        allocator,
+                                        1));
       int cwgt_id = variable_db->registerVariableAndContext(
             cwgt, dummy, no_ghosts);
 
       std::shared_ptr<pdat::FaceVariable<double> > fvar[NFACE_VARS];
       int fvindx[NFACE_VARS];
-      fvar[0].reset(new pdat::FaceVariable<double>(dim3d, "fvar0", 1));
+      fvar[0].reset(new pdat::FaceVariable<double>(dim3d, "fvar0",
+                                                   allocator,
+                                                   1));
       fvindx[0] = variable_db->registerVariableAndContext(
             fvar[0], dummy, no_ghosts);
-      fvar[1].reset(new pdat::FaceVariable<double>(dim3d, "fvar1", 1));
+      fvar[1].reset(new pdat::FaceVariable<double>(dim3d, "fvar1",
+                                                   allocator,
+                                                   1));
       fvindx[1] = variable_db->registerVariableAndContext(
             fvar[1], dummy, no_ghosts);
 
       std::shared_ptr<pdat::FaceVariable<double> > fwgt(
-         new pdat::FaceVariable<double>(dim3d, "fwgt", 1));
+         new pdat::FaceVariable<double>(dim3d, "fwgt",
+                                        allocator,
+                                        1));
       int fwgt_id = variable_db->registerVariableAndContext(
             fwgt, dummy, no_ghosts);
 
       std::shared_ptr<pdat::NodeVariable<double> > nvar[NNODE_VARS];
       int nvindx[NNODE_VARS];
-      nvar[0].reset(new pdat::NodeVariable<double>(dim3d, "nvar0", 1));
+      nvar[0].reset(new pdat::NodeVariable<double>(dim3d, "nvar0",
+                                                   allocator,
+                                                   1));
       nvindx[0] = variable_db->registerVariableAndContext(
             nvar[0], dummy, no_ghosts);
-      nvar[1].reset(new pdat::NodeVariable<double>(dim3d, "nvar1", 1));
+      nvar[1].reset(new pdat::NodeVariable<double>(dim3d, "nvar1",
+                                                   allocator,
+                                                   1));
       nvindx[1] = variable_db->registerVariableAndContext(
             nvar[1], dummy, no_ghosts);
-      nvar[2].reset(new pdat::NodeVariable<double>(dim3d, "nvar2", 1));
+      nvar[2].reset(new pdat::NodeVariable<double>(dim3d, "nvar2",
+                                                   allocator,
+                                                   1));
       nvindx[2] = variable_db->registerVariableAndContext(
             nvar[2], dummy, no_ghosts);
-      nvar[3].reset(new pdat::NodeVariable<double>(dim3d, "nvar3", 1));
+      nvar[3].reset(new pdat::NodeVariable<double>(dim3d, "nvar3",
+                                                   allocator,
+                                                   1));
       nvindx[3] = variable_db->registerVariableAndContext(
             nvar[3], dummy, no_ghosts);
 
       std::shared_ptr<pdat::NodeVariable<double> > nwgt(
-         new pdat::NodeVariable<double>(dim3d, "nwgt", 1));
+         new pdat::NodeVariable<double>(dim3d, "nwgt",
+                                        allocator,
+                                        1));
       int nwgt_id = variable_db->registerVariableAndContext(
             nwgt, dummy, no_ghosts);
 

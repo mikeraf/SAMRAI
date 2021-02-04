@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   AdaptivePoisson class declaration
  *
  ************************************************************************/
@@ -233,6 +233,8 @@ private:
    std::shared_ptr<solv::FACPreconditioner> d_fac_preconditioner;
 
    //@}
+
+   tbox::ResourceAllocator d_allocator;
 
    //@{
 

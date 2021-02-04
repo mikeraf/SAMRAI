@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated cell centered patch data type
  *
  ************************************************************************/
@@ -87,13 +87,12 @@ CellData<TYPE>::CellData(
    d_data.reset(new ArrayData<TYPE>(getGhostBox(), depth));
 }
 
-#ifdef HAVE_UMPIRE
 template<class TYPE>
 CellData<TYPE>::CellData(
    const hier::Box& box,
    int depth,
    const hier::IntVector& ghosts,
-   umpire::Allocator allocator):
+   tbox::ResourceAllocator allocator):
    hier::PatchData(box, ghosts),
    d_depth(depth)
 {
@@ -106,7 +105,6 @@ CellData<TYPE>::CellData(
 
    d_data.reset(new ArrayData<TYPE>(getGhostBox(), depth, allocator));
 }
-#endif
 
 template<class TYPE>
 CellData<TYPE>::~CellData()

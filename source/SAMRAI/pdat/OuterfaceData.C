@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated outerface centered patch data type
  *
  ************************************************************************/
@@ -59,12 +59,11 @@ OuterfaceData<TYPE>::OuterfaceData(
    }
 }
 
-#ifdef HAVE_UMPIRE
 template<class TYPE>
 OuterfaceData<TYPE>::OuterfaceData(
    const hier::Box& box,
    int depth,
-   umpire::Allocator allocator):
+   tbox::ResourceAllocator allocator):
    hier::PatchData(box, hier::IntVector::getZero(box.getDim())),
    d_depth(depth)
 {
@@ -82,7 +81,6 @@ OuterfaceData<TYPE>::OuterfaceData(
       d_data[d][1].reset(new ArrayData<TYPE>(outerfacebox, depth,allocator));
    }
 }
-#endif
 
 template<class TYPE>
 OuterfaceData<TYPE>::~OuterfaceData()

@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   AMR hierarchy generation and regridding routines.
  *
  ************************************************************************/
@@ -607,15 +607,12 @@ private:
     *
     * @pre tag_to_new && tag_to_new->hasTranspose()
     * @pre new_box_level
-    * @pre !d_hierarchy->levelExists(tag_ln + 2) || tag_to_finer
-    * @pre !d_hierarchy->levelExists(tag_ln + 2) || tag_to_finer->hasTranspose()
     */
    void
    regridFinerLevel_createAndInstallNewLevel(
       const int tag_ln,
       const double regrid_time,
       std::shared_ptr<hier::Connector>& tag_to_new,
-      std::shared_ptr<const hier::Connector> tag_to_finer,
       std::shared_ptr<hier::BoxLevel> new_box_level);
 
    /*!

@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Numerical routines for single patch in Heat equation ex.
  *
  ************************************************************************/
@@ -349,6 +349,8 @@ private:
 #ifdef HAVE_HDF5
    std::shared_ptr<appu::VisItDataWriter> d_visit_writer;
 #endif
+
+   tbox::ResourceAllocator d_allocator;
 
    /*
     * std::shared_ptrs to variables.  d_primitive_vars - [u]

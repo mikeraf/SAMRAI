@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Factory class for creating side data objects
  *
  ************************************************************************/
@@ -17,13 +17,9 @@
 #include "SAMRAI/hier/BoxGeometry.h"
 #include "SAMRAI/hier/IntVector.h"
 #include "SAMRAI/hier/PatchDataFactory.h"
-#include "SAMRAI/tbox/Complex.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <memory>
-
-#if defined(HAVE_UMPIRE)
-#include "umpire/Allocator.hpp"
-#endif
 
 namespace SAMRAI {
 namespace pdat {
@@ -73,10 +69,9 @@ public:
       bool fine_boundary_represents_var,
       const hier::IntVector& directions);
 
-#if defined(HAVE_UMPIRE)
    /**
     * Constructor for the cell data factory class that takes a specific
-    * umpire::Allocator.  The ghost cell width and depth (number of components)
+    * tbox::ResourceAllocator.  The ghost cell width and depth (number of components)
     * arguments give the defaults for all cell data objects created with this
     * factory.
     *
@@ -87,8 +82,7 @@ public:
       const hier::IntVector& ghosts,
       bool fine_boundary_represents_var,
       const hier::IntVector& directions,
-      umpire::Allocator allocator);
-#endif
+      tbox::ResourceAllocator allocator);
 
    /*!
     * @brief Constructor for the side data factory class setting up allocation
@@ -106,7 +100,6 @@ public:
       const hier::IntVector& ghosts,
       bool fine_boundary_represents_var);
 
-#if defined(HAVE_UMPIRE)
    /*!
     * @brief Constructor for the side data factory class setting up allocation
     * of data in all coordinate directions and uses an Umpire allocator
@@ -122,8 +115,8 @@ public:
       int depth,
       const hier::IntVector& ghosts,
       bool fine_boundary_represents_var,
-      umpire::Allocator allocator);
-#endif
+      tbox::ResourceAllocator allocator);
+
    /**
     * Virtual destructor for the side data factory class.
     */
@@ -222,15 +215,29 @@ public:
    validCopyTo(
       const std::shared_ptr<hier::PatchDataFactory>& dst_pdf) const;
 
+   /*!
+    * @brief Return true if this factory has an Umpire Allocator.
+    */
+   bool hasAllocator() const
+   {
+      return d_has_allocator;
+   }
+
+   /*!
+    * @brief Get the Umpire Allocator.
+    */
+   tbox::ResourceAllocator getAllocator() const
+   {
+      return d_allocator;
+   }
+
 private:
    int d_depth;
    bool d_fine_boundary_represents_var;
    hier::IntVector d_directions;
 
-#if defined(HAVE_UMPIRE)
-   umpire::Allocator d_allocator;
+   tbox::ResourceAllocator d_allocator;
    bool d_has_allocator;
-#endif
 };
 
 } // Namespace pdat

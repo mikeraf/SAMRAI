@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Numerical routines for example FAC Poisson solver
  *
  ************************************************************************/
@@ -70,6 +70,9 @@ FACPoisson::FACPoisson(
     */
    d_context = vdb->getContext(d_object_name + ":Context");
 
+   tbox::ResourceAllocator allocator =
+      tbox::AllocatorDatabase::getDatabase()->getDefaultAllocator();
+
    /*
     * Register variables with hier::VariableDatabase
     * and get the descriptor indices for those variables.
@@ -79,7 +82,7 @@ FACPoisson::FACPoisson(
       new pdat::CellVariable<double>(
          dim,
          object_name + ":computed solution",
-         1));
+         allocator));
    d_comp_soln_id =
       vdb->registerVariableAndContext(
          comp_soln,
@@ -89,7 +92,8 @@ FACPoisson::FACPoisson(
    std::shared_ptr<pdat::CellVariable<double> > exact_solution(
       new pdat::CellVariable<double>(
          dim,
-         object_name + ":exact solution"));
+         object_name + ":exact solution",
+         allocator));
    d_exact_id =
       vdb->registerVariableAndContext(
          exact_solution,
@@ -100,7 +104,8 @@ FACPoisson::FACPoisson(
       new pdat::CellVariable<double>(
          dim,
          object_name
-         + ":linear system right hand side"));
+         + ":linear system right hand side",
+         allocator));
    d_rhs_id =
       vdb->registerVariableAndContext(
          rhs_variable,

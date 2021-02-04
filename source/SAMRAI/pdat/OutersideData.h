@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated outerside centered patch data type
  *
  ************************************************************************/
@@ -18,8 +18,8 @@
 #include "SAMRAI/pdat/SideData.h"
 #include "SAMRAI/pdat/SideIndex.h"
 #include "SAMRAI/pdat/SideIterator.h"
-#include "SAMRAI/tbox/Complex.h"
 #include "SAMRAI/tbox/PIO.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <iostream>
 #include <memory>
@@ -126,7 +126,6 @@ public:
       const hier::Box& box,
       int depth);
 
-#if defined(HAVE_UMPIRE)
    /*!
     * @brief Constructor for an outerside data object.
     *
@@ -145,9 +144,8 @@ public:
    OutersideData(
       const hier::Box& box,
       int depth,
-      umpire::Allocator allocator);
-#endif
-   
+      tbox::ResourceAllocator allocator);
+
    /*!
     * @brief Virtual destructor for a outerside data object.
     */

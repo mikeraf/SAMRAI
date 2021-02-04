@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated outerside centered patch data type
  *
  ************************************************************************/
@@ -58,12 +58,11 @@ OutersideData<TYPE>::OutersideData(
    }
 }
 
-#ifdef HAVE_UMPIRE
 template<class TYPE>
 OutersideData<TYPE>::OutersideData(
    const hier::Box& box,
    int depth,
-   umpire::Allocator allocator):
+   tbox::ResourceAllocator allocator):
    hier::PatchData(box, hier::IntVector::getZero(box.getDim())),
    d_depth(depth)
 {
@@ -74,14 +73,13 @@ OutersideData<TYPE>::OutersideData(
       const hier::Box& ghosts = getGhostBox();
       const hier::Box sidebox = SideGeometry::toSideBox(ghosts, d);
       hier::Box outersidebox = sidebox;
-      outersidebox.setUpper(0, sidebox.lower(0));
-      d_data[d][0].reset(new ArrayData<TYPE>(outersidebox, depth,allocator));
-      outersidebox.setLower(0, sidebox.upper(0));
-      outersidebox.setUpper(0, sidebox.upper(0));
-      d_data[d][1].reset(new ArrayData<TYPE>(outersidebox, depth,allocator));
+      outersidebox.setUpper(d, sidebox.lower(d));
+      d_data[d][0].reset(new ArrayData<TYPE>(outersidebox, depth, allocator));
+      outersidebox.setLower(d, sidebox.upper(d));
+      outersidebox.setUpper(d, sidebox.upper(d));
+      d_data[d][1].reset(new ArrayData<TYPE>(outersidebox, depth, allocator));
    }
 }
-#endif
 
 template<class TYPE>
 OutersideData<TYPE>::~OutersideData()

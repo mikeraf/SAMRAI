@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Class containing numerical routines for modified Bratu problem
  *
  ************************************************************************/
@@ -123,33 +123,36 @@ ModifiedBratuProblem::ModifiedBratuProblem(
    d_grid_geometry(grid_geometry),
    d_lambda(tbox::MathUtilities<double>::getSignalingNaN()),
    d_input_dt(tbox::MathUtilities<double>::getSignalingNaN()),
+   d_allocator(tbox::AllocatorDatabase::getDatabase()->getDefaultAllocator()),
    d_solution(new pdat::CellVariable<double>(
-                 dim, object_name + "solution", 1)),
+                 dim, object_name + "solution", d_allocator)),
    d_source_term(new pdat::CellVariable<double>(
-                    dim, object_name + "source_term", 1)),
+                    dim, object_name + "source_term", d_allocator)),
    d_exponential_term(new pdat::CellVariable<double>(
-                         dim, object_name + "exponential_term", 1)),
+                         dim, object_name + "exponential_term", d_allocator)),
    d_diffusion_coef(new pdat::SideVariable<double>(
-                       dim, object_name + "diffusion_coef", hier::IntVector::getOne(dim), 1)),
+                       dim, object_name + "diffusion_coef",
+                       hier::IntVector::getOne(dim), d_allocator)),
    d_flux(new pdat::SideVariable<double>(
-             dim, object_name + "flux", hier::IntVector::getOne(dim), 1)),
+             dim, object_name + "flux",
+             hier::IntVector::getOne(dim), d_allocator)),
    d_coarse_fine_flux(new pdat::OutersideVariable<double>(
-                         dim, object_name + "coarse_fine_flux", 1)),
+                         dim, object_name + "coarse_fine_flux", d_allocator)),
    d_jacobian_a(new pdat::CellVariable<double>(
-                   dim, object_name + ":jacobian_a", 1)),
+                   dim, object_name + ":jacobian_a", d_allocator)),
    d_jacobian_b(new pdat::FaceVariable<double>(
-                   dim, object_name + ":jacobian_b", 1)),
+                   dim, object_name + ":jacobian_b", d_allocator)),
    d_jacobian_a_id(-1),
    d_jacobian_b_id(-1),
    d_precond_a(new pdat::CellVariable<double>(
-                  dim, object_name + "precond_a", 1)),
+                  dim, object_name + "precond_a", d_allocator)),
    d_precond_b(new pdat::FaceVariable<double>(
-                  dim, object_name + "precond_b", 1)),
+                  dim, object_name + "precond_b", d_allocator)),
    d_precond_a_id(-1),
    d_precond_b_id(-1),
    d_nghosts(hier::IntVector(dim, NUM_GHOSTS_U)),
    d_weight(new pdat::CellVariable<double>(
-               dim, object_name + "weight", 1)),
+               dim, object_name + "weight", d_allocator, 1)),
    d_fill_new_level(),
    d_soln_fill(),
    d_flux_coarsen(dim),

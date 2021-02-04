@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Numerical routines for single patch in convection
  *                diffusion example.
  *
@@ -92,8 +92,9 @@ ConvDiff::ConvDiff(
    d_object_name(object_name),
    d_dim(dim),
    d_grid_geometry(grid_geom),
-   d_primitive_vars(new pdat::CellVariable<double>(dim, "primitive_vars", 1)),
-   d_function_eval(new pdat::CellVariable<double>(dim, "function_eval", 1)),
+   d_allocator(tbox::AllocatorDatabase::getDatabase()->getDefaultAllocator()),
+   d_primitive_vars(new pdat::CellVariable<double>(dim, "primitive_vars", d_allocator)),
+   d_function_eval(new pdat::CellVariable<double>(dim, "function_eval", d_allocator)),
    d_diffusion_coeff(1.),
    d_source_coeff(0.),
    d_cfl(0.9),

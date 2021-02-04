@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Operator class for cell-centered scalar Poisson using FAC
  *
  ************************************************************************/
@@ -565,6 +565,7 @@ CellPoissonFACOps::CellPoissonFACOps(
    d_coarse_solver_max_iterations(20),
    d_residual_tolerance_during_smoothing(-1.0),
    d_flux_id(-1),
+   d_allocator(tbox::AllocatorDatabase::getDatabase()->getDefaultAllocator()),
    d_hypre_solver(hypre_solver),
    d_physical_bc_coef(0),
    d_context(hier::VariableDatabase::getDatabase()->getContext(
@@ -595,6 +596,7 @@ CellPoissonFACOps::CellPoissonFACOps(
    d_coarse_solver_max_iterations(500),
    d_residual_tolerance_during_smoothing(-1.0),
    d_flux_id(-1),
+   d_allocator(tbox::AllocatorDatabase::getDatabase()->getDefaultAllocator()),
    d_physical_bc_coef(0),
    d_context(hier::VariableDatabase::getDatabase()->getContext(
                 object_name + "::PRIVATE_CONTEXT")),
@@ -642,16 +644,18 @@ CellPoissonFACOps::buildObject(
       std::ostringstream ss;
       ss << "CellPoissonFACOps::private_cell_scratch" << d_dim.getValue();
       s_cell_scratch_var[d_dim.getValue() - 1].reset(
-         new pdat::CellVariable<double>(d_dim, ss.str()));
+         new pdat::CellVariable<double>(d_dim, ss.str(), d_allocator));
       ss.str("");
       ss << "CellPoissonFACOps::private_flux_scratch" << d_dim.getValue();
       s_flux_scratch_var[d_dim.getValue() - 1].reset(
          new pdat::SideVariable<double>(d_dim, ss.str(),
-            hier::IntVector::getOne(d_dim)));
+                                        hier::IntVector::getOne(d_dim),
+                                        d_allocator));
       ss.str("");
       ss << "CellPoissonFACOps::private_oflux_scratch" << d_dim.getValue();
       s_oflux_scratch_var[d_dim.getValue() - 1].reset(
-         new pdat::OutersideVariable<double>(d_dim, ss.str()));
+         new pdat::OutersideVariable<double>(d_dim, ss.str(),
+                                             d_allocator));
    }
 
    /*

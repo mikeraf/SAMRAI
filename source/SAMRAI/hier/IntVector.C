@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   A n-dimensional integer vector
  *
  ************************************************************************/
@@ -34,7 +34,6 @@ IntVector::s_initialize_finalize_handler(
  * *************************************************************************
  */
 
-SAMRAI_HOST_DEVICE
 IntVector::IntVector(
    const tbox::Dimension& dim):
    d_dim(dim),
@@ -48,7 +47,6 @@ IntVector::IntVector(
 #endif
 }
 
-SAMRAI_HOST_DEVICE
 IntVector::IntVector(
    size_t num_blocks,
    const tbox::Dimension& dim):
@@ -64,7 +62,6 @@ IntVector::IntVector(
 #endif
 }
 
-SAMRAI_HOST_DEVICE
 IntVector::IntVector(
    const tbox::Dimension& dim,
    int value,
@@ -92,7 +89,6 @@ IntVector::IntVector(
    }
 }
 
-SAMRAI_HOST_DEVICE
 IntVector::IntVector(
    const tbox::Dimension& dim,
    const int array[],
@@ -109,7 +105,6 @@ IntVector::IntVector(
    }
 }
 
-SAMRAI_HOST_DEVICE
 IntVector::IntVector(
    const IntVector& rhs):
    d_dim(rhs.getDim()),
@@ -119,7 +114,6 @@ IntVector::IntVector(
    TBOX_ASSERT(d_num_blocks >= 1);
 }
 
-SAMRAI_HOST_DEVICE
 IntVector::IntVector(
    const IntVector& rhs,
    size_t num_blocks):
@@ -141,7 +135,6 @@ IntVector::IntVector(
    }
 }
 
-SAMRAI_HOST_DEVICE
 IntVector::IntVector(
    const Index& rhs,
    size_t num_blocks):

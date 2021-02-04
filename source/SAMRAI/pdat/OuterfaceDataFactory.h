@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Factory class for creating outerface data objects
  *
  ************************************************************************/
@@ -17,7 +17,7 @@
 #include "SAMRAI/hier/BoxGeometry.h"
 #include "SAMRAI/hier/IntVector.h"
 #include "SAMRAI/hier/PatchDataFactory.h"
-#include "SAMRAI/tbox/Complex.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <memory>
 
@@ -50,7 +50,6 @@ public:
       const tbox::Dimension& dim,
       int depth);
 
-#if defined(HAVE_UMPIRE)
    /**
     * The constructor for the outerface data factory class.
     * The depth (number of components) sets the default for all of
@@ -64,8 +63,7 @@ public:
    OuterfaceDataFactory(
       const tbox::Dimension& dim,
       int depth,
-      umpire::Allocator allocator);
-#endif
+      tbox::ResourceAllocator allocator);
 
    /**
     * Virtual destructor for the outerface data factory class.
@@ -156,10 +154,8 @@ public:
 private:
    int d_depth;
    hier::IntVector d_no_ghosts;
-#if defined(HAVE_UMPIRE)
-   umpire::Allocator d_allocator;
+   tbox::ResourceAllocator d_allocator;
    bool d_has_allocator;
-#endif
 };
 
 }

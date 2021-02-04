@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Staged peer-to-peer communication.
  *
  ************************************************************************/
@@ -12,6 +12,7 @@
 
 #include "SAMRAI/SAMRAI_config.h"
 
+#include "SAMRAI/tbox/AllocatorDatabase.h"
 #include "SAMRAI/tbox/AsyncCommStage.h"
 #include "SAMRAI/tbox/SAMRAI_MPI.h"
 #include "SAMRAI/tbox/Timer.h"
@@ -215,6 +216,17 @@ public:
    {
       return d_mpi;
    }
+
+#ifdef HAVE_UMPIRE
+   /*!
+    * Set Umpire allocator for internal buffer allocations.
+    */
+   void
+   setAllocator(umpire::TypedAllocator<char> allocator)
+   {
+      d_allocator = allocator;
+   }
+#endif
 
    /*!
     * @brief Next task in a current communication operation.
@@ -628,6 +640,10 @@ private:
 
    // Make some temporary variable statuses to avoid repetitious allocations.
    int d_mpi_err;
+
+#ifdef HAVE_UMPIRE
+   umpire::TypedAllocator<char> d_allocator;
+#endif 
 
    std::shared_ptr<Timer> t_send_timer;
    std::shared_ptr<Timer> t_recv_timer;

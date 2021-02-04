@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated outernode centered patch data type
  *
  ************************************************************************/
@@ -83,12 +83,11 @@ OuternodeData<TYPE>::OuternodeData(
    }
 }
 
-#if defined(HAVE_UMPIRE)
 template<class TYPE>
 OuternodeData<TYPE>::OuternodeData(
    const hier::Box& box,
    int depth,
-   umpire::Allocator allocator):
+   tbox::ResourceAllocator allocator):
    hier::PatchData(box, hier::IntVector::getZero(box.getDim())),
    d_depth(depth)
 {
@@ -131,7 +130,6 @@ OuternodeData<TYPE>::OuternodeData(
 
    }
 }
-#endif
 
 template<class TYPE>
 OuternodeData<TYPE>::~OuternodeData()

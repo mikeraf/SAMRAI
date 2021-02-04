@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated face centered patch data type
  *
  ************************************************************************/
@@ -54,12 +54,11 @@ FaceData<TYPE>::FaceData(
    }
 }
 
-#if defined(HAVE_UMPIRE)
 template <class TYPE>
 FaceData<TYPE>::FaceData(const hier::Box& box,
                          int depth,
                          const hier::IntVector& ghosts,
-                         umpire::Allocator allocator)
+                         tbox::ResourceAllocator allocator)
     : hier::PatchData(box, ghosts), d_depth(depth)
 {
   TBOX_ASSERT_OBJDIM_EQUALITY2(box, ghosts);
@@ -71,7 +70,6 @@ FaceData<TYPE>::FaceData(const hier::Box& box,
     d_data[d].reset(new ArrayData<TYPE>(face, depth, allocator));
   }
 }
-#endif
 
 template<class TYPE>
 FaceData<TYPE>::~FaceData()

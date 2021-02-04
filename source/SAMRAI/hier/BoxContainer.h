@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   A container of boxes with basic domain calculus operations
  *
  ************************************************************************/
@@ -667,21 +667,6 @@ private:
       } else {
          return static_cast<int>(d_set.size());
       }
-   }
-
-   /*!
-    * @brief Returns true if there are no boxes in the container.
-    *
-    * Archaic syntax.  Synonymous with empty().  Retained for backward
-    * compatibility.
-    *
-    * @see empty()
-    */
-   DEPRECATED(
-      bool
-      isEmpty() const)
-   {
-      return empty();
    }
 
    /*!

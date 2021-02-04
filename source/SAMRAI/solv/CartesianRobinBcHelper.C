@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Robin boundary condition support on cartesian grids.
  *
  ************************************************************************/
@@ -95,6 +95,9 @@ CartesianRobinBcHelper::CartesianRobinBcHelper(
 {
 
    NULL_USE(coef_strategy);
+
+   d_allocator =
+      tbox::AllocatorDatabase::getDatabase()->getDefaultAllocator();
 
    t_set_boundary_values_in_cells = tbox::TimerManager::getManager()->
       getTimer("solv::CartesianRobinBcHelper::setBoundaryValuesInCells()");
@@ -229,12 +232,12 @@ CartesianRobinBcHelper::setBoundaryValuesInCells(
          const hier::Index& upper = boundary_box.getBox().upper();
          const hier::Box coefbox = makeFaceBoundaryBox(boundary_box);
          std::shared_ptr<pdat::ArrayData<double> > acoef_data(
-            std::make_shared<pdat::ArrayData<double> >(coefbox, 1));
+            std::make_shared<pdat::ArrayData<double> >(coefbox, 1, d_allocator));
          std::shared_ptr<pdat::ArrayData<double> > bcoef_data(
-            std::make_shared<pdat::ArrayData<double> >(coefbox, 1));
+            std::make_shared<pdat::ArrayData<double> >(coefbox, 1, d_allocator));
          std::shared_ptr<pdat::ArrayData<double> > gcoef_data(
             homogeneous_bc ? 0 :
-            new pdat::ArrayData<double>(coefbox, 1));
+            new pdat::ArrayData<double>(coefbox, 1, d_allocator));
          t_use_set_bc_coefs->start();
          d_coef_strategy->setBcCoefs(acoef_data,
             bcoef_data,

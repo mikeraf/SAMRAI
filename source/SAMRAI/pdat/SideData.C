@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated side centered patch data type
  *
  ************************************************************************/
@@ -61,14 +61,13 @@ SideData<TYPE>::SideData(
    }
 }
 
-#ifdef HAVE_UMPIRE
 template<class TYPE>
 SideData<TYPE>::SideData(
    const hier::Box& box,
    int depth,
    const hier::IntVector& ghosts,
    const hier::IntVector& directions,
-   umpire::Allocator allocator):
+   tbox::ResourceAllocator allocator):
    hier::PatchData(box, ghosts),
    d_depth(depth),
    d_directions(directions)
@@ -95,7 +94,7 @@ SideData<TYPE>::SideData(
    const hier::Box& box,
    int depth,
    const hier::IntVector& ghosts,
-   umpire::Allocator allocator):
+   tbox::ResourceAllocator allocator):
    hier::PatchData(box, ghosts),
    d_depth(depth),
    d_directions(hier::IntVector::getOne(box.getDim()))
@@ -110,7 +109,6 @@ SideData<TYPE>::SideData(
       d_data[d].reset(new ArrayData<TYPE>(side, depth, allocator));
    }
 }
-#endif
 
 template<class TYPE>
 SideData<TYPE>::SideData(

@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   hier
  *
  ************************************************************************/
@@ -34,6 +34,18 @@ OuterfaceVariable<TYPE>::OuterfaceVariable(
    int depth):
    hier::Variable(name,
                   std::make_shared<OuterfaceDataFactory<TYPE> >(dim, depth))
+{
+}
+
+template<class TYPE>
+OuterfaceVariable<TYPE>::OuterfaceVariable(
+   const tbox::Dimension& dim,
+   const std::string& name,
+   tbox::ResourceAllocator allocator,
+   int depth):
+   hier::Variable(name,
+                  std::make_shared<OuterfaceDataFactory<TYPE> >(
+                     dim, depth, allocator))
 {
 }
 

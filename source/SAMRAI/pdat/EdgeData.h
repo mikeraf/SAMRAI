@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Templated edge centered patch data type
  *
  ************************************************************************/
@@ -18,8 +18,8 @@
 #include "SAMRAI/pdat/EdgeIndex.h"
 #include "SAMRAI/pdat/EdgeIterator.h"
 #include "SAMRAI/pdat/EdgeOverlap.h"
-#include "SAMRAI/tbox/Complex.h"
 #include "SAMRAI/tbox/PIO.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <iostream>
 #include <memory>
@@ -131,7 +131,6 @@ public:
       int depth,
       const hier::IntVector& ghosts);
 
-#if defined(HAVE_UMPIRE)
    /*!
     * @brief The constructor for an edge data object.
     *
@@ -154,8 +153,8 @@ public:
       const hier::Box& box,
       int depth,
       const hier::IntVector& ghosts,
-      umpire::Allocator allocator);
-#endif
+      tbox::ResourceAllocator allocator);
+
    /*!
     * @brief The virtual destructor for an edge data object.
     */

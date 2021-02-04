@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   hier
  *
  ************************************************************************/
@@ -14,7 +14,7 @@
 #include "SAMRAI/SAMRAI_config.h"
 
 #include "SAMRAI/hier/Variable.h"
-#include "SAMRAI/tbox/Complex.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <string>
 
@@ -40,8 +40,8 @@ class NodeVariable:public hier::Variable
 {
 public:
    /*!
-    * @brief Create a cell-centered variable object with the given name and
-    * depth (i.e., number of data values at each cell index location).
+    * @brief Create a node-centered variable object with the given name and
+    * depth (i.e., number of data values at each node index location).
     * A default depth of one is provided.  The fine boundary representation
     * boolean argument indicates which values (either coarse or fine) take
     * precedence at coarse-fine mesh boundaries during coarsen and refine
@@ -51,6 +51,17 @@ public:
    NodeVariable(
       const tbox::Dimension& dim,
       const std::string& name,
+      int depth = 1,
+      bool fine_boundary_represents_var = true);
+
+   /*!
+    * @brief Constructor that also includes an Umpire allocator for
+    * allocations of the underlying data.
+    */
+   NodeVariable(
+      const tbox::Dimension& dim,
+      const std::string& name,
+      tbox::ResourceAllocator allocator,
       int depth = 1,
       bool fine_boundary_represents_var = true);
 

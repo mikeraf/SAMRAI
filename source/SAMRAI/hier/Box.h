@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Box representing a portion of the AMR index space
  *
  ************************************************************************/
@@ -581,21 +581,6 @@ public:
       d_lo = Index(dim, tbox::MathUtilities<int>::getMax());
       d_hi = Index(dim, tbox::MathUtilities<int>::getMin());
       d_empty_flag = EmptyBoxState::BOX_EMPTY;
-   }
-
-   /*!
-    * @brief Return whether the box is ``empty''.
-    *
-    * Archaic syntax.  Synonymous with empty().  Retained for backward
-    * compatibility.
-    *
-    * @see empty()
-    */
-   DEPRECATED(
-      bool
-      isEmpty() const)
-   {
-      return empty();
    }
 
    /*!

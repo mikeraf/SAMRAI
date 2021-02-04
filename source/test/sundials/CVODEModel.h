@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Example demonstrating use of CVODE vectors.
  *
  ************************************************************************/
@@ -393,6 +393,36 @@ public:
       double delta,
       int lr);
 
+   virtual int
+   applyProjection(
+      double t,
+      SundialsAbstractVector* y,
+      SundialsAbstractVector* corr,
+      double epsProj,
+      SundialsAbstractVector* err)
+   {
+      NULL_USE(t);
+      NULL_USE(y);
+      NULL_USE(corr);
+      NULL_USE(epsProj);
+      NULL_USE(err);
+
+      return 0;
+   }
+
+   virtual int evaluateJTimesRHSFunction(
+      double t,
+      SundialsAbstractVector* y,
+      SundialsAbstractVector* y_dot)
+   {
+      NULL_USE(t);
+      NULL_USE(y);
+      NULL_USE(y_dot);
+
+      return 0;
+   }
+
+
 /*************************************************************************
  *
  * Methods particular to CVODEModel class.
@@ -501,6 +531,8 @@ private:
     * Pointer to solution vector
     */
    SundialsAbstractVector* d_solution_vector;
+
+   tbox::ResourceAllocator d_allocator;
 
    /*
     * Variables

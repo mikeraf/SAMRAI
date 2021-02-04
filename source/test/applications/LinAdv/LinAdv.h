@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   Numerical routines for single patch in linear advection ex.
  *
  ************************************************************************/
@@ -465,6 +465,8 @@ private:
    std::shared_ptr<pdat::CellVariable<double> > d_workload_variable;
    int d_workload_data_id;
    bool d_use_nonuniform_workload;
+
+   tbox::ResourceAllocator d_allocator;
 
    /**
     * std::shared_ptr to state variable vector - [u]

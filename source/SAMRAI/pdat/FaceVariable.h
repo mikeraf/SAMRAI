@@ -3,7 +3,7 @@
  * This file is part of the SAMRAI distribution.  For full copyright
  * information, see COPYRIGHT and LICENSE.
  *
- * Copyright:     (c) 1997-2020 Lawrence Livermore National Security, LLC
+ * Copyright:     (c) 1997-2021 Lawrence Livermore National Security, LLC
  * Description:   hier
  *
  ************************************************************************/
@@ -12,8 +12,8 @@
 #define included_pdat_FaceVariable
 
 #include "SAMRAI/SAMRAI_config.h"
-#include "SAMRAI/tbox/Complex.h"
 #include "SAMRAI/hier/Variable.h"
+#include "SAMRAI/tbox/ResourceAllocator.h"
 
 #include <string>
 
@@ -57,6 +57,17 @@ public:
    FaceVariable(
       const tbox::Dimension& dim,
       const std::string& name,
+      int depth = 1,
+      bool fine_boundary_represents_var = true);
+
+   /*!
+    * @brief Constructor that also includes an Umpire allocator for
+    * allocations of the underlying data.
+    */
+   FaceVariable(
+      const tbox::Dimension& dim,
+      const std::string& name,
+      tbox::ResourceAllocator allocator,
       int depth = 1,
       bool fine_boundary_represents_var = true);
 
