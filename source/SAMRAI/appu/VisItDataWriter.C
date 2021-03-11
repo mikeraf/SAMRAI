@@ -118,7 +118,7 @@ VisItDataWriter::VisItDataWriter(
    d_mpi(MPI_COMM_NULL)
 {
    TBOX_ASSERT(!object_name.empty());
-   TBOX_ASSERT(number_procs_per_file == 1);
+   TBOX_ASSERT(number_procs_per_file > 0);
 
    if ((d_dim < tbox::Dimension(2)) || (d_dim > tbox::Dimension(3))) {
       TBOX_ERROR(
@@ -1384,7 +1384,9 @@ VisItDataWriter::dumpWriteBarrierEnd()
    proc_after_me = (d_my_file_cluster_number * d_file_cluster_size)
       + d_my_rank_in_file_cluster + 1;
    x[0] = 0;
-   if (proc_after_me < num_procs) {
+   bool last_in_cluster = (d_my_rank_in_file_cluster == (d_file_cluster_size - 1)) ||
+                           (proc_after_me >= num_procs);
+   if (! last_in_cluster) {
       if (d_mpi.getSize() > 1) {
          d_mpi.Send(x,
             1,
@@ -1693,10 +1695,7 @@ VisItDataWriter::writeHDFFiles(
    dump_dirname = dump_dirname + d_current_dump_directory_name;
    tbox::Utilities::recursiveMkdir(dump_dirname);
 
-// The baton barrier implementation seems to be buggy, and can affect
-// other mpi writes and reads.
-
-//#define USE_BATON_BARRIERS
+#define USE_BATON_BARRIERS
 
 #ifdef USE_BATON_BARRIERS
    dumpWriteBarrierBegin();
